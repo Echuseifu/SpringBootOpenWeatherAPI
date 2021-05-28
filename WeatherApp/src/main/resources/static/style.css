@@ -1,0 +1,18 @@
+body{
+
+
+ background: #17A2B8 url(https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.wbur.org%2Fweather&psig=AOvVaw2ITif1OdTjB76zPVNqdBRV&ust=1622322590619000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMisn-Ck7fACFQAAAAAdAAAAABAI);-->
+     background-size: cover;
+
+}
+
+
+
+
+.container{
+	background-color: rgba(255, 255, 255, 0.8);
+	margin-top: 50px;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	border-radius: 5px;
+}

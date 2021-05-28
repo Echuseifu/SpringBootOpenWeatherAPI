@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -28,7 +29,6 @@ public class WeatherController {
 //    }
 
 
-
     @GetMapping
     public String getIndex(Model model) {
         model.addAttribute("request", new Request());
@@ -44,11 +44,11 @@ public class WeatherController {
     }
 
 
-// to add the getlatesteszipcodeserach service to add list of zip codes to model
+    // to add the getlatesteszipcodeserach service to add list of zip codes to model
     @ModelAttribute("searches")
     public List<ZipCode> getLatestZipcodes() {
         return weatherService.getLatestZipCodeSearches();
     }
 
 
-}
+   }

@@ -10,60 +10,46 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class WeatherService {
 
-        @Value("${api_key}")
-        private String apiKey;
+    @Value("${api_key}")
+    private String apiKey;
 
-//    public Response getForecast(String zipCode) {
-//        String url = "http://api.openweathermap.org/data/2.5/weather?zip=" +
-//                zipCode + "&units=imperial&appid=" + apiKey;
-//        RestTemplate restTemplate = new RestTemplate();
-//        return restTemplate.getForObject(url, Response.class);
-//    }
+    @Autowired
+    ZipCodeRepository zipCodeRepository;
 
+    public Response getForecast(String zipCode) {
+        String url = "http://api.openweathermap.org/data/2.5/weather?zip=" +
+                zipCode + "&units=imperial&appid=" + apiKey;
 
-        @Autowired
-        private ZipCodeRepository zipCodeRepository;
+        // we need to save our zipcode argument as a zipcode object
+        ZipCode passedZipCode = new ZipCode(zipCode);
+        RestTemplate restTemplate = new RestTemplate();
 
-        public Response getForecast(String zipCode) {
-            String url = "http://api.openweathermap.org/data/2.5/weather?zip=" +
-                    zipCode + "&units=imperial&appid=" + apiKey;
-
-            // we need to save our zipcode argument a a zipcode object
-            ZipCode passedZipCode = new ZipCode(zipCode);
+        try {
+            Response response = restTemplate.getForObject(url, Response.class);
             zipCodeRepository.save(passedZipCode);
+            return response;
 
-
-            RestTemplate restTemplate = new RestTemplate();
-
-            try {
-                return restTemplate.getForObject(url, Response.class);
-            }
-            catch (HttpClientErrorException ex){
-                Response response = new Response();
-                response.setName("error");
-                return response;
-            }
+        } catch (HttpClientErrorException ex) {
+            return new Response("error");
         }
-
-
-        // most recent 10 searches
-    public List<ZipCode> getLatestZipCodeSearches(){
-            List<ZipCode> zipCodes = new ArrayList<>();
-            zipCodeRepository.findAll().forEach(zipCodes::add);// referencing the method directly
-           return zipCodes.stream()// allows us to use more functional methods
-                    .limit(10)
-                    .collect(Collectors.toList());
-
 
     }
 
-
+    public List<ZipCode> getLatestZipCodeSearches() {
+        List<ZipCode> zipCodes = new ArrayList<>();
+        zipCodeRepository.findAll().forEach(zipCodes::add);
+        Collections.reverse(zipCodes);
+        return zipCodes.stream()
+                .limit(10)
+                .collect(Collectors.toList());
+    }
 
 
 }

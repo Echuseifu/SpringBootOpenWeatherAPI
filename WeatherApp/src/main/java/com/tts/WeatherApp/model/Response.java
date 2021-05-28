@@ -20,4 +20,8 @@ public class Response {
     private String id;
     private String name;
     private String cod;
+
+    public Response(String name) {
+        this.name = name;
+    }
 }
